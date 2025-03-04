@@ -43,6 +43,21 @@ class RecipeDetailState extends State<RecipeDetail> {
             icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border))
         ],
       ),
+      body: Padding(
+        padding: EdgeInsets.all(18),
+        child: Column(
+          children: [
+            Image.network(widget.recipesData.image_link),
+            SizedBox(height: 8),
+            Text(widget.recipesData.name),
+            SizedBox(height: 8),
+            Text("by ${widget.recipesData.author}"),
+            SizedBox(height: 8),
+            const Text('Recipe steaps: '),
+            for(var step in widget.recipesData.recipeSteps) Text("- $step"),
+          ],
+        ),
+      ),
     );
   }   
 }
