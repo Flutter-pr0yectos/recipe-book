@@ -70,7 +70,7 @@ class HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => RecipeDetail(recipeName: recipe.name)
+          builder: (context) => RecipeDetail(recipesData: recipe)
         ));
       },
       child: Padding(

@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/recippe_model.dart';
+import 'package:flutter_application_1/providers/recipes_provider.dart';
+import 'package:provider/provider.dart';
 
-class RecipeDetail extends StatelessWidget {
-  final String recipeName;
-  const RecipeDetail({super.key, required this.recipeName});
+class RecipeDetail extends StatefulWidget {
+  final Recipe recipesData;
+  const RecipeDetail({super.key, required this.recipesData});
 
   @override
-  Widget build(BuildContext context) {
-    
+  RecipeDetailState createState() => RecipeDetailState();
+}
+
+class RecipeDetailState extends State<RecipeDetail> {
+  bool isFavorite = false;
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    isFavorite = Provider.of<RecipesProvider>(context, listen: false).favoriteRecipe.contains(widget.recipesData);
+  }
+  @override
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text(recipeName),
+        title: Text(widget.recipesData.name, style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.orange,
         leading: IconButton(
           onPressed: (){
@@ -18,7 +32,18 @@ class RecipeDetail extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
           color: Colors.white
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await Provider.of<RecipesProvider>(context, listen: false).toggleFavoritesStatus(widget.recipesData);
+              setState(() {
+                isFavorite = !isFavorite;
+              });
+            }, 
+            icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border))
+        ],
       ),
     );
-  }
+  }   
 }
+

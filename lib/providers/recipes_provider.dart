@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 class RecipesProvider extends ChangeNotifier {
   bool isLoading = false;
   List<Recipe> recipes = [];
+  List<Recipe> favoriteRecipe = [];
 
   Future<void> fetchRecipes() async {
     isLoading = true;
@@ -30,5 +31,33 @@ class RecipesProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }         
+  }
+
+  Future<void> toggleFavoritesStatus(Recipe recipe) async {
+    final isFavorite = favoriteRecipe.contains(recipe);
+    print('isFavorite: $isFavorite');
+    print('recipe: $recipe');
+    try {
+      final url = Uri.parse('http://10.0.2.2:1234/favorites');
+      final response = isFavorite ? 
+        await http.delete(url, body: json.encode({"id": recipe.id}))
+        : await http.post(url, body: json.encode(recipe.toJson()))
+        ;
+
+        if(response.statusCode == 200){
+          if(isFavorite){
+            favoriteRecipe.remove(recipe);
+          }else{
+            favoriteRecipe.add(recipe);
+          }
+
+          notifyListeners();
+        }else {
+          throw Exception('Failed to update favorite recipes');
+        }
+
+    } catch (e) {
+      print('Error updating favorite status $e');
+    }
   }
 }
