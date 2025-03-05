@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/recipes_provider.dart';
 import 'package:flutter_application_1/screens/favorites_recipes.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,10 +18,16 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) =>  RecipesProvider())
         ],
         child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Hi everyone',
-        home: RecipeBook(),
-      )
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate
+          ],
+          debugShowCheckedModeBanner: false,
+          title: 'Hi everyone',
+          home: RecipeBook(),
+        )
     );
   }
 }
